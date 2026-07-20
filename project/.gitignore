@@ -6,3 +6,4 @@ venv/
 output/
 .pytest_cache/
 *.egg-info/
+.requests.txt

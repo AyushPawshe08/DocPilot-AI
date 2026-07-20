@@ -1,10 +1,3 @@
-"""Coordinates the plan -> draft -> review -> render pipeline.
-
-The Orchestrator is intentionally the *only* place that knows the stages
-run in this order. Each stage is independent, unit-testable, and could be
-swapped, parallelized, or turned into separate microservices later
-without the API layer or the stages themselves changing.
-"""
 import logging
 import time
 
@@ -28,8 +21,7 @@ class Orchestrator:
         document_service: DocumentService | None = None,
         llm_service: LLMService | None = None,
     ):
-        # Constructor injection (with sane defaults) rather than module-level
-        # singletons: makes it trivial to substitute fakes/mocks in tests.
+
         settings = get_settings()
         shared_llm_service = llm_service or get_llm_service()
         self.planner = planner or Planner(shared_llm_service)

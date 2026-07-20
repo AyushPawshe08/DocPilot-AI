@@ -1,13 +1,4 @@
-"""Review / QA stage.
 
-Unlike the planner and executor (single structured-output calls), the
-reflector runs a small, *bounded* ReAct-style loop: it may call the
-``count_words`` / ``analyze_structure`` tools to inspect its own draft
-before committing to a final version. The loop is capped by
-``MAX_QA_ITERATIONS`` so a misbehaving model can never spin forever or
-run up an unbounded API bill -- a deliberate scalability/reliability
-guard, not an oversight.
-"""
 import logging
 
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage

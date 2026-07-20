@@ -1,12 +1,3 @@
-"""LLM provider service with automatic fallback support.
-
-All LangChain model invocation flows through this module so provider
-selection, retry-to-fallback behavior, logging, timeout policy, and future
-provider changes stay in one place instead of being duplicated across
-agent stages.
-"""
-from __future__ import annotations
-
 import logging
 from functools import lru_cache
 from typing import Any, Callable, TypeVar

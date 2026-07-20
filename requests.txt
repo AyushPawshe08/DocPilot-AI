@@ -1,0 +1,10 @@
+******** Test Case 1: Product Requirements Document ******** 
+
+Create a Product Requirements Document for a mobile health tracking app
+that monitors sleep, exercise, and nutrition.
+
+
+******** Test Case 2: Business Proposal (Complex Request) & Word Doc Inspection ******** 
+
+Write a detailed business proposal for an AI-powered inventory SaaS for mid-sized retailers
+including timeline, budget, and risks.
