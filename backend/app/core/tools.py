@@ -1,10 +1,3 @@
-"""Tools available to the quality-assurance (reflector) agent.
-
-This is the "tool orchestration" surface of the agent: instead of trusting
-the LLM's own claim that a document is well-formed, the reflector actually
-*calls* deterministic Python functions to measure the draft and feeds the
-measurements back into the model before it commits to a final answer.
-"""
 from langchain_core.tools import tool
 
 from app.models.schema import QualityReport

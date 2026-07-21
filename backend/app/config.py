@@ -17,8 +17,8 @@ class Settings(BaseSettings):
         default="llama-3.3-70b-versatile",
         validation_alias=AliasChoices("GROQ_MODEL_NAME", "MODEL_NAME"),
     )
-    MISTRAL_API_KEY: str
-    MISTRAL_MODEL_NAME: str = "mistral-small-latest"
+    GEMINI_API_KEY: str
+    GEMINI_MODEL_NAME: str = "gemini-3.1-flash-lite"
     LLM_TEMPERATURE: float = 0.0
     LLM_REQUEST_TIMEOUT: int = 60
     LLM_PROVIDER_MAX_RETRIES: int = Field(

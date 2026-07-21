@@ -3,10 +3,11 @@ from functools import lru_cache
 from typing import Any, Callable, TypeVar
 
 from langchain_groq import ChatGroq
-from langchain_mistralai import ChatMistralAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 from app.config import get_settings
 from app.exceptions import LLMServiceError
+
 
 logger = logging.getLogger(__name__)
 
@@ -14,19 +15,11 @@ T = TypeVar("T")
 
 
 class LLMService:
-    """Reusable LLM gateway for primary/fallback model execution.
-
-    Groq is used as the primary model. If any invocation fails, the same
-    request is retried once against Mistral and the fallback use is logged.
-    The service deliberately treats rate limits, timeouts, API errors, and
-    unexpected exceptions the same way because provider libraries expose
-    those errors differently.
-    """
 
     def __init__(self, primary_llm: Any | None = None, fallback_llm: Any | None = None):
         settings = get_settings()
         self.primary_model_name = settings.GROQ_MODEL_NAME
-        self.fallback_model_name = settings.MISTRAL_MODEL_NAME
+        self.fallback_model_name = settings.GEMINI_MODEL_NAME
         self._primary_llm = primary_llm or ChatGroq(
             api_key=settings.GROQ_API_KEY,
             model=settings.GROQ_MODEL_NAME,
@@ -34,12 +27,10 @@ class LLMService:
             timeout=settings.LLM_REQUEST_TIMEOUT,
             max_retries=settings.LLM_PROVIDER_MAX_RETRIES,
         )
-        self._fallback_llm = fallback_llm or ChatMistralAI(
-            api_key=settings.MISTRAL_API_KEY,
-            model=settings.MISTRAL_MODEL_NAME,
+        self._fallback_llm = fallback_llm or ChatGoogleGenerativeAI(
+            api_key=settings.GEMINI_API_KEY,
+            model=settings.GEMINI_MODEL_NAME,
             temperature=settings.LLM_TEMPERATURE,
-            timeout=settings.LLM_REQUEST_TIMEOUT,
-            max_retries=settings.LLM_PROVIDER_MAX_RETRIES,
         )
 
     def invoke_structured(
@@ -89,7 +80,7 @@ class LLMService:
     def _invoke_with_fallback(self, invoke: Callable[[Any], T], operation_name: str) -> T:
         try:
             return invoke(self._primary_llm)
-        except Exception as primary_error:  # noqa: BLE001 - provider errors vary by SDK
+        except Exception as primary_error:  
             logger.warning(
                 "Primary LLM failed during %s; retrying with fallback model %s: %s",
                 operation_name,
